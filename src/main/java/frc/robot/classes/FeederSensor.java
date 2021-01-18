@@ -6,9 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.classes;
-
-
-
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 

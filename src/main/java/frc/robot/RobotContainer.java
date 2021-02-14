@@ -135,17 +135,17 @@ public class RobotContainer {
         TrajectoryConfig config = 
         new TrajectoryConfig(
             MAX_SPEED_AUTO,
-            MAX_ACCELERATION_AUTO)
-            .setKinematics(DRIVE_KINEMATICS)
-            .addConstraint(autoVoltageConstraint); 
+            MAX_ACCELERATION_AUTO).setKinematics(DRIVE_KINEMATICS).addConstraint(autoVoltageConstraint); 
 
         Trajectory octoAuto = TrajectoryGenerator.generateTrajectory( 
             new Pose2d(0,0,new Rotation2d(0)), // Start at the origin facing forward
             List.of(
-                new Translation2d(1,1), //Go through these two points
-                new Translation2d(2,-1)
+                 new Translation2d(1, 0.5),
+                 new Translation2d(2,-0.5)
+                 //Go through these two points
+                
                 ),  
-            new Pose2d(3,1,new Rotation2d(0)), //End at the point (3,1) in meters
+            new Pose2d(3,0.5,new Rotation2d(0)), //End at the point (3,1) in meters
             config
          );
 

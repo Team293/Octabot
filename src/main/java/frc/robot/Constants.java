@@ -55,7 +55,7 @@ public class Constants {
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
 
-        public static final double TRACK_WIDTH_METERS = 1.6563335663292353; // TODO Check
+        public static final double TRACK_WIDTH_METERS = 0.6563335663292353; // TODO Check
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH_METERS);
         
         
@@ -64,10 +64,10 @@ public class Constants {
     public static final class TrajectoryConstants{
         
         // Max speed in meters per second
-        public static final double MAX_SPEED_AUTO = 3;
+        public static final double MAX_SPEED_AUTO = 2;
 
         // Max acceleration in meters per second per second
-        public static final double MAX_ACCELERATION_AUTO = 2; //TODO find actual numbers for us
+        public static final double MAX_ACCELERATION_AUTO = 1; //TODO find actual numbers for us
 
         // Max voltage
         public static final double MAX_VOLTAGE_AUTO = 11;

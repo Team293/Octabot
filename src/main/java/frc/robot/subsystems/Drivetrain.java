@@ -35,7 +35,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import com.kauailabs.navx.frc.AHRS;
-
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.I2C.Port;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -74,7 +74,7 @@ public class Drivetrain extends SubsystemBase {
     private boolean encodersAvailable;
     private boolean useEncoders = true;
     
-    private AHRS navX = new AHRS(Port.kMXP);
+    private AHRS navX = new AHRS(SPI.Port.kMXP);
     private Pose2d savedPose;
     private final DifferentialDriveOdometry m_odometry;
 
@@ -86,6 +86,11 @@ public class Drivetrain extends SubsystemBase {
             //Instantiating Drivetrain Odometry as NavX heading
 
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroHeading())); 
+
+    navX.calibrate(); // Calibrates the F-boi gyro
+   
+    //navX.reset();
+    navX.zeroYaw();
     
     //Clearing sticky faults
     leftTalonLead.clearStickyFaults();
@@ -139,6 +144,7 @@ public class Drivetrain extends SubsystemBase {
                 edgesToMeters(getRightEncoderPosition())
             
         );
+        SmartDashboard.putNumber("Gyro heading", getGyroHeading());
 
     }
 
@@ -383,7 +389,7 @@ public class Drivetrain extends SubsystemBase {
     }
       
     public double getGyroHeading() {
-        return navX.getFusedHeading();
+        return (navX.getFusedHeading()); // makes 0-360 fused heading from navx to -180->180
     }
 
     public Pose2d getCurrentPose() {

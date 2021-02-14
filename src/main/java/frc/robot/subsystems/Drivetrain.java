@@ -348,7 +348,7 @@ public class Drivetrain extends SubsystemBase {
    */
     private void enableEncoders() {
         encodersAvailable = 
-            leftTalonLead.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10) == ErrorCode.OK &
+            leftTalonLead.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10) == ErrorCode.OK &&
             rightTalonLead.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10) == ErrorCode.OK;
         if (!encodersAvailable) {
         DriverStation.reportError("Failed to configure Drivetrain encoders!!", false);

@@ -49,8 +49,10 @@ public class Constants {
 
         // MISC Constants
         public final static double WHEEL_CIRCUMFERENCE_METERS = 0.24;
-        public final static int ENCODER_EPR = 112; // Edges per Rotation
         public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(KS, KV, KA);
+        public static final int ENCODER_EPR = 112; // Edges per Rotation
+        public final static int ENCODER_EDGES_PER_STEP =  4; 
+        public final static int GEARBOX_RATIO_TO_ONE = 20;
         // Baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B = 2;
         public static final double RAMSETE_ZETA = 0.7;
@@ -64,10 +66,10 @@ public class Constants {
     public static final class TrajectoryConstants{
         
         // Max speed in meters per second
-        public static final double MAX_SPEED_AUTO = 2;
+        public static final double MAX_SPEED_AUTO = 0.3;
 
         // Max acceleration in meters per second per second
-        public static final double MAX_ACCELERATION_AUTO = 1; //TODO find actual numbers for us
+        public static final double MAX_ACCELERATION_AUTO = 0.15; //TODO find actual numbers for us
 
         // Max voltage
         public static final double MAX_VOLTAGE_AUTO = 11;

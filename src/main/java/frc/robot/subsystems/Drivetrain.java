@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.DrivetrainConstants.*;
 import frc.robot.Constants.TrajectoryConstants.*;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -77,6 +78,7 @@ public class Drivetrain extends SubsystemBase
     private AHRS navX;
     private Pose2d savedPose;
     private final DifferentialDriveOdometry m_odometry;
+    private final Field2d m_field;
 
     public Drivetrain() 
     {
@@ -92,6 +94,10 @@ public class Drivetrain extends SubsystemBase
 
         //Instantiating Drivetrain Odometry as NavX heading
         m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroHeading())); 
+
+        //Adding Field2d to send "field" data to simluation
+        m_field = new Field2d();
+        SmartDashboard.putData("Field",m_field);
 
         //Clearing sticky faults
         leftTalonLead.clearStickyFaults();
@@ -146,6 +152,10 @@ public class Drivetrain extends SubsystemBase
         SmartDashboard.putNumber("TranslationY", m_odometry.getPoseMeters().getTranslation().getY());
         SmartDashboard.putNumber("Left Encoder Position", getLeftEncoderPosition());
         SmartDashboard.putNumber("Right Encoder Position", getRightEncoderPosition());
+
+        //Updating robot Geometry on field simulation
+        m_field.setRobotPose(getCurrentPose());
+
     }
 
     @Override

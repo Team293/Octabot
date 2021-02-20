@@ -50,8 +50,9 @@ public class Constants {
         // MISC Constants
         public final static double WHEEL_CIRCUMFERENCE_METERS = 0.24;
         public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(KS, KV, KA);
-        public static final int ENCODER_EPR = 112; // Edges per Rotation
+        public static final int ENCODER_UNITS_PER_ROTATION = 28;
         public final static int ENCODER_EDGES_PER_STEP =  4; 
+        public static final int ENCODER_EPR = ENCODER_UNITS_PER_ROTATION * ENCODER_EDGES_PER_STEP; // Edges per Rotation
         public final static int GEARBOX_RATIO_TO_ONE = 20;
         // Baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B = 2;

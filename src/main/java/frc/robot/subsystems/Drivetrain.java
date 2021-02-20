@@ -36,6 +36,8 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -44,6 +46,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.UpdateDCMotor;
@@ -81,8 +85,6 @@ public class Drivetrain extends SubsystemBase
     private final DifferentialDriveOdometry m_odometry;
     private final Field2d m_field;
     private final DifferentialDrivetrainSim m_driveSim;
-    private AnalogGyro m_gyro;
-    private AnalogGyroSim m_gyroSim;
     private TalonSRXSimCollection m_leftDriveSim;
     private TalonSRXSimCollection m_rightDriveSim;
 
@@ -116,8 +118,6 @@ public class Drivetrain extends SubsystemBase
             null //Standard deviations for noise ect doesn't need to be added yet
         );
 
-        m_gyro = new AnalogGyro(1);
-        m_gyroSim = new AnalogGyroSim(m_gyro);
         m_leftDriveSim = leftTalonLead.getSimCollection();
         m_rightDriveSim = rightTalonLead.getSimCollection();
 
@@ -184,6 +184,36 @@ public class Drivetrain extends SubsystemBase
     @Override
     public void simulationPeriodic() {
         // This method will be called once per scheduler run when in simulation
+
+        
+        m_driveSim.setInputs(leftTalonLead.getMotorOutputVoltage(),
+                         rightTalonLead.getMotorOutputVoltage());
+
+        m_driveSim.update(0.02);
+
+                        
+        m_leftDriveSim.setQuadratureRawPosition(
+            distanceToNativeUnits(
+            m_driveSim.getLeftPositionMeters()));
+
+        m_leftDriveSim.setQuadratureVelocity(
+            velocityToNativeUnits(
+            m_driveSim.getLeftVelocityMetersPerSecond()));
+
+        m_rightDriveSim.setQuadratureRawPosition(
+            distanceToNativeUnits(
+            m_driveSim.getLeftPositionMeters()));
+
+        m_rightDriveSim.setQuadratureVelocity(
+                velocityToNativeUnits(
+                m_driveSim.getLeftVelocityMetersPerSecond()));
+
+        int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+        SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+        angle.set(Math.IEEEremainder(-m_driveSim.getHeading().getDegrees(), 360));
+
+        m_leftDriveSim.setBusVoltage(RobotController.getBatteryVoltage());
+        m_rightDriveSim.setBusVoltage(RobotController.getBatteryVoltage());
     }
 
     // Put methods for controlling this subsystem
@@ -354,6 +384,21 @@ public class Drivetrain extends SubsystemBase
     public static double metersToEdges(double meters)
     {
         return (meters/ WHEEL_CIRCUMFERENCE_METERS) * 0.1d;
+    }
+    // Converts meters to native talon units
+    public int distanceToNativeUnits(double positionMeters){
+        double wheelRotations = positionMeters/WHEEL_CIRCUMFERENCE_METERS;
+        double motorRotation = wheelRotations * (double)GEARBOX_RATIO_TO_ONE;
+        int sensorCounts = (int) (motorRotation * ENCODER_UNITS_PER_ROTATION);
+        return sensorCounts;
+    }
+    // Converts m/s to native talon units
+    public int velocityToNativeUnits(double velocity){
+        double wheelRotationsPerSecond = velocity/WHEEL_CIRCUMFERENCE_METERS;
+        double motorRotationsPerSecond = wheelRotationsPerSecond * (double)GEARBOX_RATIO_TO_ONE;
+        double motorRotationsPer100ms = motorRotationsPerSecond / 10.0;
+        int sensorCountsPer100ms = (int)(motorRotationsPer100ms * ENCODER_UNITS_PER_ROTATION);
+        return sensorCountsPer100ms;
     }
 
     public Command createRamseteController(Trajectory trajectory) 

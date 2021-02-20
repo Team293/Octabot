@@ -22,6 +22,7 @@ import frc.robot.Constants.TrajectoryConstants.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
@@ -108,11 +109,19 @@ public class Drivetrain extends SubsystemBase
         SmartDashboard.putData("Field",m_field);
 
         //Instantiating riveSimulation
+        /*m_driveSim = new DifferentialDrivetrainSim(
+            LinearSystemId.identifyDrivetrainSystem(KV, KA, KV,KA),
+            UpdateDCMotor.getHDHex(1),
+            20.0, // Gear Ratio
+            TRACK_WIDTH_METERS,
+            0.0381, //Wheel radius (m)
+            null
+        );*/
         m_driveSim = new DifferentialDrivetrainSim(
             UpdateDCMotor.getHDHex(1), // Don't need to extend could just create a local DCMotor 
             20., // Gear Ratio
-            4., //Moment of Inertia (Not Correct) (m/s^2)
-            15., //Mass of robot (Not Correct) (kg)
+            0.154, //Moment of Inertia (Not Correct) (m/s^2)
+            6.35, //Mass of robot (Not Correct) (kg)
             0.0381, //Wheel radius (m)
             TRACK_WIDTH_METERS,
             null //Standard deviations for noise ect doesn't need to be added yet
@@ -168,7 +177,8 @@ public class Drivetrain extends SubsystemBase
                 edgesToMeters(getLeftEncoderPosition()),
                 edgesToMeters(getRightEncoderPosition())
         );
-
+        m_field.setRobotPose(m_odometry.getPoseMeters());
+        
         SmartDashboard.putNumber("Gyro heading", navX.getAngle());
         SmartDashboard.putNumber("Yaw val", navX.getYaw());
         SmartDashboard.putNumber("TranslationX", m_odometry.getPoseMeters().getTranslation().getX());
@@ -202,11 +212,11 @@ public class Drivetrain extends SubsystemBase
 
         m_rightDriveSim.setQuadratureRawPosition(
             distanceToNativeUnits(
-            m_driveSim.getLeftPositionMeters()));
+            m_driveSim.getRightPositionMeters()));
 
         m_rightDriveSim.setQuadratureVelocity(
                 velocityToNativeUnits(
-                m_driveSim.getLeftVelocityMetersPerSecond()));
+                m_driveSim.getRightVelocityMetersPerSecond()));
 
         int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
         SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
@@ -214,6 +224,14 @@ public class Drivetrain extends SubsystemBase
 
         m_leftDriveSim.setBusVoltage(RobotController.getBatteryVoltage());
         m_rightDriveSim.setBusVoltage(RobotController.getBatteryVoltage());
+
+        SmartDashboard.putNumber("Gyro heading", navX.getAngle());
+        SmartDashboard.putNumber("Yaw val", navX.getYaw());
+        SmartDashboard.putNumber("TranslationX", m_odometry.getPoseMeters().getTranslation().getX());
+        SmartDashboard.putNumber("TranslationY", m_odometry.getPoseMeters().getTranslation().getY());
+        SmartDashboard.putNumber("Left Encoder Position", getLeftEncoderPosition());
+        SmartDashboard.putNumber("Right Encoder Position", getRightEncoderPosition());
+
     }
 
     // Put methods for controlling this subsystem

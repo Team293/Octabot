@@ -120,7 +120,7 @@ public class Drivetrain extends SubsystemBase
         m_driveSim = new DifferentialDrivetrainSim(
             UpdateDCMotor.getHDHex(1), // Don't need to extend could just create a local DCMotor 
             20., // Gear Ratio
-            0.154, //Moment of Inertia (Not Correct) (m/s^2)
+            0.154   , //Moment of Inertia (Not Correct) (m/s^2) 0.154
             6.35, //Mass of robot (Not Correct) (kg)
             0.0381, //Wheel radius (m)
             TRACK_WIDTH_METERS,
@@ -476,7 +476,7 @@ public class Drivetrain extends SubsystemBase
     public double getLeftEncoderPosition() 
     {
         // Returns the number of steps, multiply by edges per step to get EPR, divided by the gearbox ratio
-        return (leftTalonLead.getSelectedSensorPosition(0) * ENCODER_EDGES_PER_STEP) / GEARBOX_RATIO_TO_ONE;
+        return (-leftTalonLead.getSelectedSensorPosition(0) * ENCODER_EDGES_PER_STEP) / GEARBOX_RATIO_TO_ONE;
     }
     
       /**

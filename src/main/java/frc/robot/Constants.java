@@ -66,10 +66,10 @@ public class Constants {
     public static final class TrajectoryConstants{
         
         // Max speed in meters per second
-        public static final double MAX_SPEED_AUTO = 0.3;
+        public static final double MAX_SPEED_AUTO = 1;
 
         // Max acceleration in meters per second per second
-        public static final double MAX_ACCELERATION_AUTO = 0.15; //TODO find actual numbers for us
+        public static final double MAX_ACCELERATION_AUTO = 0.5; //TODO find actual numbers for us
 
         // Max voltage
         public static final double MAX_VOLTAGE_AUTO = 11;

@@ -139,19 +139,19 @@ public class RobotContainer {
         new TrajectoryConfig(
             MAX_SPEED_AUTO,
             MAX_ACCELERATION_AUTO).setKinematics(DRIVE_KINEMATICS).addConstraint(autoVoltageConstraint); 
-
+/*
         Trajectory octoAuto = TrajectoryGenerator.generateTrajectory( 
             new Pose2d(0,0,new Rotation2d(0)), // Start at the origin facing forward
             List.of(
-              new Translation2d(1, 0),
-              new Translation2d(1, 1),
-              new Translation2d(0, 1)
+              new Translation2d(2, 0),
+              new Translation2d(2, 2),
+              new Translation2d(0, 2)
                 ),  
             new Pose2d(0, 0,new Rotation2d(0)), //End at the point (3,1) in meters
             config
-         );
+         );*/
       
-        /*String trajectoryJSON = "output/square.wpilib.json";
+        String trajectoryJSON = "output/Slalom.wpilib.json";
         Trajectory octoAuto = new Trajectory();
         try {
           Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -159,7 +159,7 @@ public class RobotContainer {
         } catch (IOException ex) {
           DriverStation.reportError("unable to open trajectory" + trajectoryJSON, ex.getStackTrace());
         }
-        */
+        
          m_drivetrain.resetOdometry(octoAuto.getInitialPose());
          
     return m_drivetrain.createRamseteController(octoAuto).andThen(() -> m_drivetrain.dumbDrive(0, 0));

@@ -12,7 +12,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -55,6 +54,7 @@ public class Constants
         public static final  int ENCODER_EDGES_PER_STEP =  4; 
         public static final  int GEARBOX_RATIO_TO_ONE = 20;
 
+        public static final double TRACK_WIDTH_FEET = 13/12; //Track width is 13 inches
         public static final double TRACK_WIDTH_METERS = 0.6563335663292353; // TODO Check
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH_METERS);
         public static final double FEETPERMETERS = 3.281;
@@ -64,6 +64,7 @@ public class Constants
     {
         public static final double K1 = 1.0;
         public static final double K2 = 3.0;
+        
     }
 }
 

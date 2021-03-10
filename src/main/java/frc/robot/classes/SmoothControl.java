@@ -1,7 +1,6 @@
 package frc.robot.classes;
 
 import static frc.robot.Constants.SmoothControlConstants.*;
-import frc.robot.classes.Position2D;
 
 public class SmoothControl 
 {

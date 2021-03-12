@@ -106,8 +106,8 @@ public class Drivetrain extends SubsystemBase
     {
         m_odometry.update(
             Rotation2d.fromDegrees(getGyroHeading()),
-                edgesToMeters(getLeftEncoderPosition()),
-                edgesToMeters(getRightEncoderPosition())
+                edgesToFeet(getLeftEncoderPosition()),
+                edgesToFeet(getRightEncoderPosition())
         );
 
         SmartDashboard.putNumber("Gyro heading", navX.getAngle());
@@ -139,35 +139,12 @@ public class Drivetrain extends SubsystemBase
 
     public double getCurrentVelocity()
     {
-        double leftFeetPerSecond = edgesPerDecisecToMetersPerSec(leftTalonLead.getSelectedSensorVelocity(0)) * FEETPERMETERS;
-        double rightFeetPerSecond = edgesPerDecisecToMetersPerSec(rightTalonLead.getSelectedSensorVelocity(0)) * FEETPERMETERS;
+        double leftFeetPerSecond = edgesPerDecisecToFeetPerSec(leftTalonLead.getSelectedSensorVelocity(0)) * FEETPERMETERS;
+        double rightFeetPerSecond = edgesPerDecisecToFeetPerSec(rightTalonLead.getSelectedSensorVelocity(0)) * FEETPERMETERS;
         
         return((leftFeetPerSecond + rightFeetPerSecond) / 2.0); 
     }
 
-    // Converts joystick input adjusted for deadband to current for the motor
-    public void dumbDrive(double leftPos, double rightPos) 
-    {
-        double leftMotorPower = 0.0;
-        double rightMotorPower = 0.0;
-
-        // Running at half speed as to not kill people
-        leftMotorPower = clampInput(leftPos, L_DEADBAND);
-        rightMotorPower = clampInput(rightPos, R_DEADBAND);
-
-        if((INVALID_INPUT == leftMotorPower) || (INVALID_INPUT == rightMotorPower))
-        {
-            System.out.println("Invalid motor input! Left motor: " + leftPos + "Right motor: " + rightPos);
-            //Motor power is invalid! Stop all motors
-            stop();
-        }
-        else
-        {
-            //Both left and right motor power is valid, set motor power
-            leftTalonLead.set(ControlMode.PercentOutput, leftMotorPower * VELOCITY_LIMIT_PERCENTAGE);
-            rightTalonLead.set(ControlMode.PercentOutput, rightMotorPower * VELOCITY_LIMIT_PERCENTAGE);
-        }
-    }
 
     public void velocityDrive(double vL, double vR)
     {
@@ -219,45 +196,30 @@ public class Drivetrain extends SubsystemBase
         rightTalonLead.set(ControlMode.Current, 0);
     }
 
-    //Velocity Drive without Deadband for vision purposes
-    public void visionDrive(double leftPos, double rightPos)
-    {
-        if (leftPos > 1 || leftPos < -1 || rightPos > 1 || rightPos < -1)
-        {
-            //Position is invalid!
-            System.out.println("Invalid motor input! Left motor: " + leftPos + "Right motor: " + rightPos);
-            //Stop all motors
-            stop();
-        } 
-        //Position is valid, set motors
-        else 
-        {
-            leftTalonLead.set(ControlMode.Velocity,(leftPos * MAX_VELOCITY));
-            rightTalonLead.set(ControlMode.Velocity,(rightPos * MAX_VELOCITY));
-        }
-    }
 
     //Returns encoder clicks to meters used for getting distance travelled
-    public static double edgesToMeters(double clicks)
+    public static double edgesToFeet(double clicks)
     {
-        return (WHEEL_CIRCUMFERENCE_METERS / ENCODER_EPR) * clicks; 
+        return (WHEEL_CIRCUMFERENCE_FEET / ENCODER_EPR) * clicks; 
     }
     // Converts from encoder edges per 100 milliseconds to meters per second.
-    public static double edgesPerDecisecToMetersPerSec(double stepsPerDecisec) 
+    public static double edgesPerDecisecToFeetPerSec(double stepsPerDecisec) 
     {
-        return edgesToMeters(stepsPerDecisec * 10);
+        return edgesToFeet(stepsPerDecisec * 10);
     }
     //Converts from meters per second to encoder edges per 100 milliseconds.
-    public static double metersPerSecToEdgesPerDecisec(double metersPerSec) 
+    public static double feetPerSecToEdgesPerDecisec(double metersPerSec) 
     {
-        return metersToEdges(metersPerSec) * 0.1d;
+        return feetToEdges(metersPerSec) * 0.1d;
     }
 
     //Converts from meters to encoder edges
-    public static double metersToEdges(double meters)
+    public static double feetToEdges(double meters)
     {
-        return (meters/ WHEEL_CIRCUMFERENCE_METERS) * 0.1d;
+        return (meters/ WHEEL_CIRCUMFERENCE_FEET) * 0.1d;
     }
+    //
+   
 
     /**
    * Attempts to enable the drivetrain encoders.

@@ -48,7 +48,7 @@ public class Constants
         public static final double KS = 0.679;
 
         // MISC Constants
-        public static final  double WHEEL_CIRCUMFERENCE_METERS = 0.24;
+        public static final  double WHEEL_CIRCUMFERENCE_FEET = (3/12)*Math.PI; // Wheel diameter 3 in, converting to feet
         public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(KS, KV, KA);
         public static final int ENCODER_EPR = 112; // Edges per Rotation
         public static final  int ENCODER_EDGES_PER_STEP =  4; 

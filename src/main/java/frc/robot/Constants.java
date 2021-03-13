@@ -10,9 +10,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -30,41 +27,41 @@ public class Constants
         public static final double VELOCITY_LIMIT_PERCENTAGE = 0.5;
         public static final double CLOSED_LOOP_RAMP = 0.5;
         public static final double VELOCITY_SLOWDOWN_MODIFIER = 0.5;
-        public static final double MAX_VELOCITY = 21549;
-        public static final double INVALID_INPUT = -99;
-        public static final double L_DEADBAND = .15;
-        public static final double R_DEADBAND = .15;
+        public static final double MAX_VELOCITY = 1.0d;
+        public static final double L_DEADBAND = .15d;
+        public static final double R_DEADBAND = .15d;
 
         //PID configuration constants
         public static final int PID_SLOT_ID = 0;
         public static final int ENCODER_CONFIG_TIMEOUT_MS = 4000;
         public static final int PID_CONFIG_TIMEOUT_MS = 10;
-        public static final double KF = 0.04759;
-        public static final double KP = 0.0181;
-        public static final double KI = 0.0;
-        public static final double KD = 0.0;
-        public static final double KA = 0.575;
-        public static final double KV = 9.9;
-        public static final double KS = 0.679;
+        public static final double KF = 3.996d;
+        public static final double KP = 34.1d;
+        public static final double KI = 0.0d;
+        public static final double KD = 0.0d;
 
         // MISC Constants
-        public static final  double WHEEL_CIRCUMFERENCE_FEET = (3/12)*Math.PI; // Wheel diameter 3 in, converting to feet
-        public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(KS, KV, KA);
-        public static final int ENCODER_EPR = 112; // Edges per Rotation
-        public static final  int ENCODER_EDGES_PER_STEP =  4; 
-        public static final  int GEARBOX_RATIO_TO_ONE = 20;
-
-        public static final double TRACK_WIDTH_FEET = 13/12; //Track width is 13 inches
-        public static final double TRACK_WIDTH_METERS = 0.6563335663292353; // TODO Check
-        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH_METERS);
-        public static final double FEETPERMETERS = 3.281;
+        public static final double WHEEL_CIRCUMFERENCE_FEET = (3.0d/12.0d)*Math.PI; // Wheel diameter 3 in, converting to feet
+        public static final double SECONDS_TO_DECISEC = 1.0d/10.0d;
+        public static final int GEARBOX_RATIO_TO_ONE = 20;
+        public static final int ENCODER_COUNTS_PER_REVOLUTION = 28;
+        public static final int ENCODER_EDGES_PER_STEP =  4; 
+        public static final int ENCODER_UNITS_PER_REVOLUTION = ENCODER_COUNTS_PER_REVOLUTION; // Edges per Rotation
+        public static final double TRACK_WIDTH_FEET = 13.0d/12.0d; //Track width is 13 inches
     }
 
     public static final class SmoothControlConstants
     {
-        public static final double K1 = 1.0;
-        public static final double K2 = 3.0;
-        
+        public static final double K1 = 1.0d;
+        public static final double K2 = 3.0d;
+    }
+
+    public static final class AutonomousCommandConstants
+    {
+        public static final double TARGET_WITHIN_RANGE_FEET = DrivetrainConstants.TRACK_WIDTH_FEET/4.0d; //Half track width
+        public static final double STARTING_X = 0.0d;
+        public static final double STARTING_Y = 0.0d;
+        public static final double STARTING_HEADING = Math.toRadians(0.0d);
     }
 }
 
